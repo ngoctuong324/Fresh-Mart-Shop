@@ -4,6 +4,7 @@
  */
 package data.dao;
 
+import data.impl.BannerImpl;
 import data.impl.CategoryImpl;
 import data.impl.DealImpl;
 import data.impl.ProductImpl;
@@ -22,5 +23,9 @@ public class Database {
 
     public static DealDao getDealDao(){
         return new DealImpl();
+    }
+    
+    public static BannerDao getBannerDao(){
+        return new BannerImpl();
     }
 }

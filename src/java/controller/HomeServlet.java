@@ -70,17 +70,42 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         // --- Lấy danh sách Category ---
         List<Category> listCategory = Database.getCategoryDao().findAllCategory();
         request.setAttribute("listCategory", listCategory);
 
-        // --- Lấy danh sách Product ---
         List<Product> listProduct = Database.getProductDao().findAllProduct();
         request.setAttribute("listProduct", listProduct);
+        
+        // --- Lấy Deals hôm nay ---
+        DealDao dealDao = new DealImpl();
+        int dealsInDay = 5;
 
-        List<Deal> listDeal = Database.getDealDao().findAllDeal();
-        request.setAttribute("listDeal", listDeal);
+        List<Deal> allDeals = dealDao.findAllDeal();
+        int totalDeals = allDeals.size();
+
+        List<Deal> dealsToday = new ArrayList<>();
+
+        if (totalDeals > 0) {
+            dealsInDay = Math.min(dealsInDay, totalDeals);
+
+            LocalDate today = LocalDate.now();
+            long daysSinceStart = ChronoUnit.DAYS.between(LocalDate.of(2025, 1, 1), today);
+            // Tính vị trí bắt đầu
+            int offsetDeal = (int) ((daysSinceStart * dealsInDay) % totalDeals);
+
+            // Lấy danh sách theo LIMIT offset, dealsInDay
+            dealsToday = dealDao.findDealsByLimit(offsetDeal, dealsInDay);
+
+            // Nếu offset ở gần cuối → không đủ số lượng → cần lấy thêm từ đầu (giống vòng tròn)
+            if (dealsToday.size() < dealsInDay) {
+                int remaining = dealsInDay - dealsToday.size();
+
+                List<Deal> extra = dealDao.findDealsByLimit(0, remaining);
+                dealsToday.addAll(extra);
+            }
+        }
+        request.setAttribute("listDeal", dealsToday);
 
         // --- Lấy Banner hôm nay ---
         BannerDao bannerDao = new BannerImpl();

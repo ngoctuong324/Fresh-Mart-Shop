@@ -91,4 +91,46 @@ public class DealImpl implements DealDao {
 
         return null;
     }
+    
+    @Override
+    public List<Deal> findDealsByLimit(int offset, int limit) {
+        List<Deal> listDeal = new ArrayList<>();
+        String sql = "SELECT * FROM deals ORDER BY dealID DESC LIMIT ?, ?";
+
+        try (Connection con = MySQLDriver.getConnection();
+             PreparedStatement sttm = con.prepareStatement(sql)) {
+
+            sttm.setInt(1, offset); // vị trí bắt đầu
+            sttm.setInt(2, limit);  // số lượng deal lấy ra
+
+            try (ResultSet rs = sttm.executeQuery()) {
+                while (rs.next()) {
+                    int dealID = rs.getInt("dealID");
+                    int productID = rs.getInt("productID");
+                    String productName = rs.getString("productName");
+                    double price = rs.getDouble("price");
+                    double discountPercent = rs.getDouble("discountPercent");
+                    double discountPrice = rs.getDouble("discountPrice");
+                    String unit = rs.getString("unit");
+                    String imageURL = rs.getString("imageURL");
+
+                    listDeal.add(new Deal(
+                            dealID,
+                            productID,
+                            productName,
+                            price,
+                            discountPercent,
+                            discountPrice,
+                            unit,
+                            imageURL
+                    ));
+                }
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(DealImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return listDeal;
+    }
 }

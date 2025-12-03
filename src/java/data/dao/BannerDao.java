@@ -12,7 +12,7 @@ import model.Banner;
  * @author DMX
  */
 public interface BannerDao {
-    List<Banner> findAllBanner();
-    List<Banner> findBannersByLimit(int offset, int limit);
+    public List<Banner> findAllBanner();
+    public List<Banner> findBannersByLimit(int offset, int limit);
 }
 

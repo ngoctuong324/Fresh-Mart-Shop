@@ -10,5 +10,6 @@ import model.Deal;
 public interface DealDao {
     public List<Deal> findAllDeal();
     public Deal findDeal(int dealID);
+    public List<Deal> findDealsByLimit(int offset, int limit);
 }
 

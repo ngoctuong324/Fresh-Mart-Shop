@@ -40,13 +40,8 @@
             </span>
             <img src="./assets/images/${d.imageURL}" alt="${d.productName}" class="deal-card__img" />
             <h3 class="deal-card__name">${d.productName}</h3>
-            <p class="deal-card__price">
-              <fmt:formatNumber value="${d.price * (1 - (d.discountPercent / 100.0))}" type="currency" currencySymbol="VNĐ" /> / ${d.unit}
-            </p>
-            <!-- Giá gốc gạch ngang dưới -->
-            <span style="text-decoration: line-through; color: gray; font-size: 0.85em; display: block;">
-              ${d.price} VNĐ
-            </span>
+            <p class="deal-card__price"> <fmt:formatNumber value="${d.price * (1 - (d.discountPercent / 100.0))}" type="currency" currencySymbol="VNĐ" /> / ${d.unit} </p>
+            <span style="text-decoration: line-through; color: gray; font-size: 0.85em; display: block;"> <fmt:formatNumber value="${d.price}" type="currency" currencySymbol="VNĐ" /> </span>
             <button class="p-card__btn">Add to Cart</button>
           </article>
         </c:forEach>
@@ -55,7 +50,7 @@
 
 
 
-<!-- PROMO BANNERS -->
+    <!-- PROMO BANNERS -->
     <section class="promo">
         <div class="promo__header">
             <i class="fa-solid fa-fire promo__icon"></i>
